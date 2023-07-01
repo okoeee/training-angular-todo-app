@@ -1,39 +1,45 @@
+import { CategoryColor } from "../models/category";
 import { Status, Todo } from "../models/todo";
 
 export const TODOLIST: Todo[] = [
   {
     id: 1,
-    categoryId: 1,
-    title: "Buy groceries",
-    body: "Milk, eggs, bread",
-    state: Status.IS_COMPLETED,
+    title: "Complete project proposal",
+    body: "Write a detailed project proposal for the upcoming client meeting.",
+    status: Status.IS_PROGRESSIVE,
+    categoryName: "Work",
+    categoryColor: CategoryColor.COLOR_OPTION1
   },
   {
     id: 2,
-    categoryId: 2,
-    title: "Finish homework",
-    body: "Math assignment",
-    state: Status.IS_PROGRESSIVE,
+    title: "Buy groceries",
+    body: "Get milk, eggs, bread, and vegetables from the supermarket.",
+    status: Status.IS_STARTED,
+    categoryName: "Personal",
+    categoryColor: CategoryColor.COLOR_OPTION2
   },
   {
     id: 3,
-    categoryId: 1,
-    title: "Go to the gym",
-    body: "Workout routine",
-    state: Status.IS_PROGRESSIVE,
+    title: "Call John",
+    body: "Discuss the latest project updates and schedule a meeting.",
+    status: Status.IS_COMPLETED,
+    categoryName: "Work",
+    categoryColor: CategoryColor.COLOR_OPTION1
   },
   {
     id: 4,
-    categoryId: 3,
-    title: "Read a book",
-    body: "Sci-fi novel",
-    state: Status.IS_STARTED,
+    title: "Go for a run",
+    body: "Run for 30 minutes in the park.",
+    status: Status.IS_PROGRESSIVE,
+    categoryName: "Health",
+    categoryColor: CategoryColor.COLOR_OPTION3
   },
   {
     id: 5,
-    categoryId: 2,
-    title: "Write a blog post",
-    body: "Topic: Technology trends",
-    state: Status.IS_COMPLETED,
-  },
+    title: "Read a book",
+    body: "Start reading 'The Power of Now' by Eckhart Tolle.",
+    status: Status.IS_STARTED,
+    categoryName: "Personal",
+    categoryColor: CategoryColor.COLOR_OPTION2
+  }
 ];
