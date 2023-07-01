@@ -18,7 +18,7 @@ export class TodoListItemComponent {
   ) {}
 
   ngOnInit(): void {
-    this.todoList = TODOLIST;
+    this.getTodoList();
   }
 
   getTodoList() {
