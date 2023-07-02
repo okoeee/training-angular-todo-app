@@ -17,6 +17,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TodoCreateComponent } from './todo/todo-create/todo-create.component';
 import { TodoFormComponent } from './todo/todo-form/todo-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { TodoUpdateComponent } from './todo/todo-update/todo-update.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     TodoListComponent,
     TodoListItemComponent,
     TodoCreateComponent,
-    TodoFormComponent
+    TodoFormComponent,
+    TodoUpdateComponent
   ],
   imports: [
     BrowserModule,

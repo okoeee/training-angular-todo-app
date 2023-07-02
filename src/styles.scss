@@ -82,6 +82,12 @@ body {
 a.a-hover-none {
   color: currentColor
 }
+button {
+  a {
+    color: #fff;
+    text-decoration: none;
+  }
+}
 
 /* text */
 .success-message {

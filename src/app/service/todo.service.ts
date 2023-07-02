@@ -25,6 +25,12 @@ export class TodoService {
     );
   }
 
+  getTodo(id: number): Observable<Todo> {
+    return this.http.get<Todo>(`${this.todoUrl}/${id}`, this.httpOptions).pipe(
+      catchError(this.handleError<Todo>('getTodo'))
+    );
+  }
+
   addTodoList(todoForm: TodoForm): Observable<TodoForm> {
     return this.http.post<TodoForm>(this.todoUrl, todoForm, this.httpOptions).pipe(
       catchError(this.handleError<TodoForm>('addTodoList'))

@@ -5,6 +5,7 @@ export interface Todo {
   title: string,
   body: string,
   status: Status,
+  categoryId: number,
   categoryName: string,
   categoryColor: CategoryColor
 }

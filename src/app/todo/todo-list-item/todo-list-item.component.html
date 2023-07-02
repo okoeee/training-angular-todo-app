@@ -10,7 +10,9 @@
     </mat-card-header>
     <mat-card-content class="margin-small-bottom">{{ todo.body }}</mat-card-content>
     <mat-card-actions align="end">
-      <button mat-flat-button color="primary" class="margin-small-right">編集</button>
+      <button mat-flat-button color="primary" class="margin-small-right">
+        <a routerLink="/todo/update/{{ todo.id }}">編集</a>
+      </button>
       <button mat-flat-button color="warn">削除</button>
     </mat-card-actions>
   </mat-card>

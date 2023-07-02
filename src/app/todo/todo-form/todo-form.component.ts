@@ -2,7 +2,7 @@ import { Component, Input, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TodoForm } from '../model/form.model';
 import { TodoService } from 'src/app/service/todo.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CategoryService } from 'src/app/service/category.service';
 import { Observable } from 'rxjs';
 import { Category } from 'src/app/models/category';
@@ -15,6 +15,8 @@ import { Category } from 'src/app/models/category';
 export class TodoFormComponent {
 
   @Input() isStatusDisabled: boolean = false;
+  @Input() isUpdateMode: boolean = false;
+  isLoading = true;
   todoForm: FormGroup;
   categoryOptions: Category[] = [];
   statusOptions = [
@@ -26,13 +28,14 @@ export class TodoFormComponent {
   constructor(
     private todoService: TodoService,
     private categoryService: CategoryService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
 
     this.todoForm = new FormGroup({
       title: new FormControl('', Validators.required),
       body: new FormControl('', Validators.required),
-      categoryId: new FormControl('', Validators.required),
+      categoryId: new FormControl(0, Validators.required),
       status: new FormControl(0, Validators.required),
     });
   }
@@ -40,6 +43,9 @@ export class TodoFormComponent {
   ngOnInit() {
     this.getCategoryList();
     this.checkFormStatusDisabled();
+    if(this.isUpdateMode) {
+      this.setFormInitialValueForUpdate();
+    }
   }
 
   onSubmit() {
@@ -64,7 +70,9 @@ export class TodoFormComponent {
 
   getCategoryList() {
     this.categoryService.getCategoryList().subscribe(
-      categoryList => this.categoryOptions = categoryList
+      categoryList => {
+        this.categoryOptions = categoryList
+      }
     );
   }
 
@@ -72,6 +80,24 @@ export class TodoFormComponent {
     if(this.isStatusDisabled) {
       this.statusForm.disable();
     }
+  }
+
+  setFormInitialValueForUpdate() {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.todoService.getTodo(id).subscribe(
+      todo => {
+        this.todoForm.patchValue(
+          {
+            title: todo.title,
+            body: todo.body,
+            categoryId: todo.categoryId,
+            status: todo.status
+          }
+        )
+        console.log(JSON.stringify(todo))
+        this.isLoading = false;
+      }
+    );
   }
 
   get titleForm() {

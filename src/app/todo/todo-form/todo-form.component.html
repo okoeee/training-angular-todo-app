@@ -1,5 +1,5 @@
 <h2>Todo Create</h2>
-<form [formGroup]="todoForm" (ngSubmit)="onSubmit()" class="todo-form">
+<form *ngIf="!isLoading" [formGroup]="todoForm" (ngSubmit)="onSubmit()" class="todo-form">
   <div *ngIf="titleForm.invalid && (titleForm.dirty || titleForm.touched)">
     <div *ngIf="titleForm.errors?.['required']">
       タイトルが入力されていません

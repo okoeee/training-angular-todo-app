@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Status, Todo } from '../../models/todo';
-import { TODOLIST } from '../../mock/todo';
 import { CategoryColor } from 'src/app/models/category';
 import { TodoService } from 'src/app/service/todo.service';
 
