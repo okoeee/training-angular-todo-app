@@ -13,7 +13,7 @@
       <a routerLink="/todo/update/{{ todo.id }}">
         <button mat-flat-button color="primary" class="margin-small-right">編集</button>
       </a>
-      <button mat-flat-button color="warn">削除</button>
+      <button mat-flat-button (click)="deleteTodo(todo)" color="warn">削除</button>
     </mat-card-actions>
   </mat-card>
   <br>

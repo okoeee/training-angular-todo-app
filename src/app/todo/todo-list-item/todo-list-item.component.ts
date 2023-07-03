@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Status, Todo } from '../../models/todo';
 import { CategoryColor } from 'src/app/models/category';
 import { TodoService } from 'src/app/service/todo.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-todo-list-item',
@@ -13,7 +14,8 @@ export class TodoListItemComponent {
   todoList: Todo[] = [];
 
   constructor(
-    private todoService: TodoService
+    private todoService: TodoService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -34,6 +36,15 @@ export class TodoListItemComponent {
         return "完了"
       default:
         return "";
+    }
+  }
+
+  deleteTodo(todo: Todo) {
+    if(confirm(`${todo.title}を削除しますか`)) {
+      this.todoService.deleteTodo(todo).subscribe(
+        _ =>
+          location.reload()
+      );
     }
   }
 
