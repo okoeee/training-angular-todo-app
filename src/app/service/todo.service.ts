@@ -37,6 +37,12 @@ export class TodoService {
     )
   }
 
+  updateTodo(id: number, todoForm: TodoForm): Observable<TodoForm> {
+    return this.http.put<TodoForm>(`${this.todoUrl}/${id}`, todoForm, this.httpOptions).pipe(
+      catchError(this.handleError<TodoForm>('updateTodoList'))
+    );
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(`${operation} failed: ${error.message}`);

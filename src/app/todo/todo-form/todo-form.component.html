@@ -1,5 +1,5 @@
-<h2>Todo Create</h2>
-<form *ngIf="!isLoading" [formGroup]="todoForm" (ngSubmit)="onSubmit()" class="todo-form">
+<h2>{{ pageTitle }}</h2>
+<form [formGroup]="todoForm" (ngSubmit)="onSubmit()" class="todo-form">
   <div *ngIf="titleForm.invalid && (titleForm.dirty || titleForm.touched)">
     <div *ngIf="titleForm.errors?.['required']">
       タイトルが入力されていません
@@ -16,7 +16,7 @@
   </div>
   <mat-form-field>
     <mat-label>本文</mat-label>
-    <input matInput formControlName="body">
+    <textarea matInput formControlName="body"></textarea>
   </mat-form-field>
   <div *ngIf="categoryIdForm.invalid && (categoryIdForm.dirty || categoryIdForm.touched)">
     <div *ngIf="categoryIdForm.errors?.['required']">

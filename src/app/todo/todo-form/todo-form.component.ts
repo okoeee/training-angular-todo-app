@@ -14,9 +14,9 @@ import { Category } from 'src/app/models/category';
 })
 export class TodoFormComponent {
 
+  @Input() pageTitle = '';
   @Input() isStatusDisabled: boolean = false;
   @Input() isUpdateMode: boolean = false;
-  isLoading = true;
   todoForm: FormGroup;
   categoryOptions: Category[] = [];
   statusOptions = [
@@ -59,12 +59,11 @@ export class TodoFormComponent {
         categoryId: todoFormValue.categoryId,
         status: todoFormValue.status
       }
-      alert(JSON.stringify(todoForm));
-      this.todoService.addTodoList(todoForm).subscribe(
-        response => {
-          this.router.navigate(['/']);
-        }
-      );
+      if(this.isUpdateMode) {
+        this.updateTodo(todoForm);
+      } else {
+        this.addTodo(todoForm);
+      }
     }
   }
 
@@ -92,7 +91,23 @@ export class TodoFormComponent {
             categoryId: todo.categoryId,
             status: todo.status
           });
-        this.isLoading = false;
+      }
+    );
+  }
+
+  addTodo(todoForm: TodoForm) {
+    this.todoService.addTodoList(todoForm).subscribe(
+      _ => {
+        this.router.navigate(['/']);
+      }
+      );
+    }
+
+  updateTodo(todoForm: TodoForm) {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.todoService.updateTodo(id, todoForm).subscribe(
+      _ => {
+        this.router.navigate(['/']);
       }
     );
   }
