@@ -86,15 +86,12 @@ export class TodoFormComponent {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.todoService.getTodo(id).subscribe(
       todo => {
-        this.todoForm.patchValue(
-          {
+        this.todoForm.patchValue({
             title: todo.title,
             body: todo.body,
             categoryId: todo.categoryId,
             status: todo.status
-          }
-        )
-        console.log(JSON.stringify(todo))
+          });
         this.isLoading = false;
       }
     );
