@@ -25,6 +25,14 @@ export class CategoryListItemComponent {
     });
   }
 
+  deleteCategory(id: number, categoryName: string) {
+    if(confirm(`${categoryName}を削除しますか`)) {
+      this.categoryService.deleteCategory(id).subscribe(
+        _ => location.reload()
+      );
+    }
+  }
+
   getCategoryColor(categoryId: number): string {
     switch(categoryId) {
       case 0:

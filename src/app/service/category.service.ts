@@ -43,6 +43,12 @@ export class CategoryService {
     );
   }
 
+  deleteCategory(id: number): Observable<Category> {
+    return this.http.delete<Category>(`${this.categoryUrl}/${id}`, this.httpOptions).pipe(
+      catchError(this.handleError<Category>('deleteCategory'))
+    );
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any, caught: Observable<T>): Observable<T> => {
       console.error(`${operation} failed: ${error.message}`);
