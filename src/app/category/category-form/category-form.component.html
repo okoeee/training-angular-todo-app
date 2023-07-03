@@ -1,0 +1,37 @@
+<h2>{{ pageTitle }}</h2>
+<form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" class="category-form">
+
+  <div *ngIf="nameForm.invalid && (nameForm.dirty || nameForm.touched)">
+    <div *ngIf="nameForm.errors?.['required']">
+      カテゴリー名が入力されていません
+    </div>
+  </div>
+  <mat-form-field>
+    <mat-label>タイトル</mat-label>
+    <input matInput formControlName="name">
+  </mat-form-field>
+
+  <div *ngIf="slugForm.invalid && (slugForm.dirty || slugForm.touched)">
+    <div *ngIf="slugForm.errors?.['required']">
+      スラッグが入力されていません
+    </div>
+  </div>
+  <mat-form-field>
+    <mat-label>スラッグ</mat-label>
+    <input matInput formControlName="slug">
+  </mat-form-field>
+
+  <div *ngIf="categoryColorForm.invalid && (categoryColorForm.dirty || categoryColorForm.touched)">
+    <div *ngIf="categoryColorForm.errors?.['required']">
+      カテゴリーが選択されていません
+    </div>
+  </div>
+  <mat-form-field>
+    <mat-label>カテゴリーの色</mat-label>
+    <mat-select formControlName="categoryColor">
+      <mat-option *ngFor="let categoryColor of categoryColorList" [value]="categoryColor.value">{{ categoryColor.name }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button type="submit" mat-flat-button color="primary">送信</button>
+</form>

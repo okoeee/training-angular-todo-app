@@ -22,6 +22,8 @@ import { TodoUpdateComponent } from './todo/todo-update/todo-update.component';
 import { CategoryListComponent } from './category/category-list/category-list.component';
 import { CategoryListItemComponent } from './category/category-list-item/category-list-item.component';
 import { HeaderComponent } from './views/header/header.component';
+import { CategoryCreateComponent } from './category/category-create/category-create.component';
+import { CategoryFormComponent } from './category/category-form/category-form.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,9 @@ import { HeaderComponent } from './views/header/header.component';
     TodoUpdateComponent,
     CategoryListComponent,
     CategoryListItemComponent,
-    HeaderComponent
+    HeaderComponent,
+    CategoryCreateComponent,
+    CategoryFormComponent
   ],
   imports: [
     BrowserModule,

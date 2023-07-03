@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Category } from '../models/category';
+import { CategoryForm } from '../category/model/form.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,9 +25,21 @@ export class CategoryService {
     );
   }
 
+  addCategory(categoryForm: CategoryForm): Observable<CategoryForm> {
+    return this.http.post<CategoryForm>(this.categoryUrl, categoryForm, this.httpOptions).pipe(
+      catchError(this.handleError<CategoryForm>('addCategory'))
+    );
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
+    return (error: any, caught: Observable<T>): Observable<T> => {
       console.error(`${operation} failed: ${error.message}`);
+      if (error.status === 0) {
+        console.error('An error occurred:', error.error.message);
+      // サーバー側から返却されるエラー
+      } else {
+        console.error(`Backend returned code ${error.status}, body was: `, error.error.message);
+      }
       return of(result as T)
     }
   }

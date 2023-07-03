@@ -4,6 +4,7 @@ import { TodoListComponent } from '../todo/todo-list/todo-list.component';
 import { TodoCreateComponent } from '../todo/todo-create/todo-create.component';
 import { TodoUpdateComponent } from '../todo/todo-update/todo-update.component';
 import { CategoryListComponent } from '../category/category-list/category-list.component';
+import { CategoryCreateComponent } from '../category/category-create/category-create.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'todo', pathMatch: 'full' },
@@ -11,6 +12,7 @@ const routes: Routes = [
   { path: 'todo/create', component: TodoCreateComponent },
   { path: 'todo/update/:id', component: TodoUpdateComponent },
   { path: 'category', component: CategoryListComponent },
+  { path: 'category/create', component: CategoryCreateComponent },
 ]
 
 @NgModule({
