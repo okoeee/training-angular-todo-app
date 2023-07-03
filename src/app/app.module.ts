@@ -21,6 +21,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TodoUpdateComponent } from './todo/todo-update/todo-update.component';
 import { CategoryListComponent } from './category/category-list/category-list.component';
 import { CategoryListItemComponent } from './category/category-list-item/category-list-item.component';
+import { HeaderComponent } from './views/header/header.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { CategoryListItemComponent } from './category/category-list-item/categor
     TodoFormComponent,
     TodoUpdateComponent,
     CategoryListComponent,
-    CategoryListItemComponent
+    CategoryListItemComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

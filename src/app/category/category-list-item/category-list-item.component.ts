@@ -41,5 +41,20 @@ export class CategoryListItemComponent {
     }
   }
 
+  getCategoryName(categoryId: number): string {
+    switch(categoryId) {
+      case 0:
+        return "灰"
+      case 1:
+        return "赤"
+      case 2:
+        return "緑"
+      case 3:
+        return "青"
+      default:
+        return "灰";
+    }
+  }
+
 }
 
