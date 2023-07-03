@@ -22,7 +22,6 @@ export class CategoryListItemComponent {
   getCategoryList() {
     this.categoryService.getCategoryList().subscribe(categories => {
       this.categoryList = categories;
-      console.log(categories)
     });
   }
 
