@@ -44,14 +44,20 @@ export class TodoService {
   }
 
   deleteTodo(todo: Todo): Observable<Todo> {
-    return this.http.delete<Todo>(`${this.todoUrl}/${todo.id}`).pipe(
+    return this.http.delete<Todo>(`${this.todoUrl}/${todo.id}`, this.httpOptions).pipe(
       catchError(this.handleError<Todo>('deleteTodoList'))
     );
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
+    return (error: any, caught: Observable<T>): Observable<T> => {
       console.error(`${operation} failed: ${error.message}`);
+      if (error.status === 0) {
+        console.error('An error occurred:', error.error.message);
+      // サーバー側から返却されるエラー
+      } else {
+        console.error(`Backend returned code ${error.status}, body was: `, error.error.message);
+      }
       return of(result as T)
     }
   }
