@@ -8,7 +8,7 @@ import { CategoryService } from 'src/app/service/category.service';
   styleUrls: ['./category-list-item.component.scss']
 })
 export class CategoryListItemComponent {
-  displayedColumns: string[] = ['name', 'slug', 'categoryColor'];
+  displayedColumns: string[] = ['name', 'slug', 'categoryColor', 'expand'];
   categoryList: Category[] = [];
 
   constructor(

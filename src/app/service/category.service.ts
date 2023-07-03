@@ -25,9 +25,21 @@ export class CategoryService {
     );
   }
 
+  getCategory(id: number): Observable<Category> {
+    return this.http.get<Category>(`${this.categoryUrl}/${id}`, this.httpOptions).pipe(
+      catchError(this.handleError<Category>('getCategory'))
+    );
+  }
+
   addCategory(categoryForm: CategoryForm): Observable<CategoryForm> {
     return this.http.post<CategoryForm>(this.categoryUrl, categoryForm, this.httpOptions).pipe(
       catchError(this.handleError<CategoryForm>('addCategory'))
+    );
+  }
+
+  updateCategory(id: number, categoryForm: CategoryForm): Observable<CategoryForm> {
+    return this.http.put<CategoryForm>(`${this.categoryUrl}/${id}`, categoryForm, this.httpOptions).pipe(
+      catchError(this.handleError<CategoryForm>('updateCategory'))
     );
   }
 

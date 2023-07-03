@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Category } from 'src/app/models/category';
 import { CategoryService } from 'src/app/service/category.service';
 import { CategoryForm } from '../model/form.model';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-category-form',
@@ -24,6 +24,7 @@ export class CategoryFormComponent {
   constructor(
     private categoryService: CategoryService,
     private router: Router,
+    private route: ActivatedRoute
   ) {
     this.categoryForm = new FormGroup({
       name: new FormControl('', Validators.required),
@@ -32,7 +33,9 @@ export class CategoryFormComponent {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.setFormInitialValueForUpdate();
+  }
 
   onSubmit() {
     if(this.categoryForm.invalid) {
@@ -52,13 +55,29 @@ export class CategoryFormComponent {
     }
   }
 
+  setFormInitialValueForUpdate() {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.categoryService.getCategory(id).subscribe(category => {
+      this.categoryForm.setValue({
+        name: category.name,
+        slug: category.slug,
+        categoryColor: category.categoryColor,
+      });
+    });
+  }
+
   addCategory(categoryForm: CategoryForm) {
     this.categoryService.addCategory(categoryForm).subscribe(
       _ => this.router.navigate(['/category'])
     );
   }
 
-  updateCategory(categoryForm: CategoryForm) {}
+  updateCategory(categoryForm: CategoryForm) {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.categoryService.updateCategory(id, categoryForm).subscribe(
+      _ => this.router.navigate(['/category'])
+    );
+  }
 
   get nameForm() {
     return this.categoryForm.controls['name'];

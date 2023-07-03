@@ -9,6 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing/app-routing.module';
@@ -24,6 +25,7 @@ import { CategoryListItemComponent } from './category/category-list-item/categor
 import { HeaderComponent } from './views/header/header.component';
 import { CategoryCreateComponent } from './category/category-create/category-create.component';
 import { CategoryFormComponent } from './category/category-form/category-form.component';
+import { CategoryUpdateComponent } from './category/category-update/category-update.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,8 @@ import { CategoryFormComponent } from './category/category-form/category-form.co
     CategoryListItemComponent,
     HeaderComponent,
     CategoryCreateComponent,
-    CategoryFormComponent
+    CategoryFormComponent,
+    CategoryUpdateComponent
   ],
   imports: [
     BrowserModule,
