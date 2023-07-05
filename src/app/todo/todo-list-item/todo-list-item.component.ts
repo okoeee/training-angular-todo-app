@@ -3,6 +3,7 @@ import { Status, Todo } from '../../models/todo';
 import { CategoryColor } from 'src/app/models/category';
 import { TodoService } from 'src/app/service/todo.service';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-todo-list-item',
@@ -11,6 +12,7 @@ import { Router } from '@angular/router';
 })
 export class TodoListItemComponent {
 
+  subscriptions = new Subscription();
   todoList: Todo[] = [];
 
   constructor(
@@ -22,8 +24,14 @@ export class TodoListItemComponent {
     this.getTodoList();
   }
 
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+  }
+
   getTodoList() {
-    this.todoService.getTodoList().subscribe(todoList => this.todoList = todoList);
+    this.subscriptions.add(
+      this.todoService.getTodoList().subscribe(todoList => this.todoList = todoList)
+    );
   }
 
   getStatusName(status: Status): string {
@@ -41,9 +49,11 @@ export class TodoListItemComponent {
 
   deleteTodo(todo: Todo) {
     if(confirm(`${todo.title}を削除しますか`)) {
-      this.todoService.deleteTodo(todo).subscribe(
-        _ =>
-          location.reload()
+      this.subscriptions.add(
+        this.todoService.deleteTodo(todo).subscribe(
+          _ =>
+            location.reload()
+        )
       );
     }
   }

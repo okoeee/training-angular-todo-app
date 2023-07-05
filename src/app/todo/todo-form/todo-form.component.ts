@@ -4,7 +4,7 @@ import { TodoForm } from '../model/form.model';
 import { TodoService } from 'src/app/service/todo.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CategoryService } from 'src/app/service/category.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Category } from 'src/app/models/category';
 
 @Component({
@@ -17,6 +17,7 @@ export class TodoFormComponent {
   @Input() pageTitle = '';
   @Input() isStatusDisabled: boolean = false;
   @Input() isUpdateMode: boolean = false;
+  subscriptions = new Subscription();
   todoForm: FormGroup;
   categoryOptions: Category[] = [];
   statusOptions = [
@@ -24,6 +25,7 @@ export class TodoFormComponent {
     {value: 1, name: '進行中'},
     {value: 2, name: '完了'},
   ];
+  parameterId: number;
 
   constructor(
     private todoService: TodoService,
@@ -31,13 +33,14 @@ export class TodoFormComponent {
     private router: Router,
     private route: ActivatedRoute
   ) {
-
     this.todoForm = new FormGroup({
       title: new FormControl('', Validators.required),
       body: new FormControl('', Validators.required),
       categoryId: new FormControl(0, Validators.required),
       status: new FormControl(0, Validators.required),
     });
+
+    this.parameterId = Number(this.route.snapshot.paramMap.get('id'));
   }
 
   ngOnInit() {
@@ -46,6 +49,10 @@ export class TodoFormComponent {
     if(this.isUpdateMode) {
       this.setFormInitialValueForUpdate();
     }
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   onSubmit() {
@@ -68,10 +75,12 @@ export class TodoFormComponent {
   }
 
   getCategoryList() {
-    this.categoryService.getCategoryList().subscribe(
-      categoryList => {
-        this.categoryOptions = categoryList
-      }
+    this.subscriptions.add(
+      this.categoryService.getCategoryList().subscribe(
+        categoryList => {
+          this.categoryOptions = categoryList
+        }
+      )
     );
   }
 
@@ -82,33 +91,36 @@ export class TodoFormComponent {
   }
 
   setFormInitialValueForUpdate() {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.todoService.getTodo(id).subscribe(
-      todo => {
-        this.todoForm.patchValue({
-            title: todo.title,
-            body: todo.body,
-            categoryId: todo.categoryId,
-            status: todo.status
-          });
-      }
+    this.subscriptions.add(
+      this.todoService.getTodo(this.parameterId).subscribe(
+        todo => {
+          this.todoForm.patchValue({
+              title: todo.title,
+              body: todo.body,
+              categoryId: todo.categoryId,
+              status: todo.status
+            });
+        }
+      )
     );
   }
 
   addTodo(todoForm: TodoForm) {
-    this.todoService.addTodoList(todoForm).subscribe(
-      _ => {
-        this.router.navigate(['/']);
-      }
-      );
-    }
+    this.subscriptions.add(
+      this.todoService.addTodoList(todoForm).subscribe(
+        _ => {
+          this.router.navigate(['/']);
+        })
+    );
+  }
 
   updateTodo(todoForm: TodoForm) {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.todoService.updateTodo(id, todoForm).subscribe(
-      _ => {
-        this.router.navigate(['/']);
-      }
+    this.subscriptions.add(
+      this.todoService.updateTodo(this.parameterId, todoForm).subscribe(
+        _ => {
+          this.router.navigate(['/']);
+        }
+      )
     );
   }
 
