@@ -1,0 +1,44 @@
+<h2>{{ pageTitle }}</h2>
+<form [formGroup]="todoForm" (ngSubmit)="onSubmit()" class="todo-form">
+  <div *ngIf="titleForm.invalid && (titleForm.dirty || titleForm.touched)">
+    <div *ngIf="titleForm.errors?.['required']">
+      タイトルが入力されていません
+    </div>
+  </div>
+  <mat-form-field>
+    <mat-label>タイトル</mat-label>
+    <input matInput formControlName="title">
+  </mat-form-field>
+  <div *ngIf="bodyForm.invalid && (bodyForm.dirty || bodyForm.touched)">
+    <div *ngIf="bodyForm.errors?.['required']">
+      本文が入力されていません
+    </div>
+  </div>
+  <mat-form-field>
+    <mat-label>本文</mat-label>
+    <textarea matInput formControlName="body"></textarea>
+  </mat-form-field>
+  <div *ngIf="categoryIdForm.invalid && (categoryIdForm.dirty || categoryIdForm.touched)">
+    <div *ngIf="categoryIdForm.errors?.['required']">
+      カテゴリーが選択されていません
+    </div>
+  </div>
+  <mat-form-field>
+    <mat-label>カテゴリー</mat-label>
+    <mat-select formControlName="categoryId">
+      <mat-option *ngFor="let category of categoryOptions" [value]="category.id">{{ category.name }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div *ngIf="statusForm.invalid && (statusForm.dirty || statusForm.touched)">
+    <div *ngIf="statusForm.errors?.['required']">
+      ステータスが選択されていません
+    </div>
+  </div>
+  <mat-form-field>
+    <mat-label>ステータス</mat-label>
+    <mat-select formControlName="status">
+      <mat-option *ngFor="let status of statusOptions" [value]="status.value">{{ status.name }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button type="submit" mat-flat-button color="primary">送信</button>
+</form>

@@ -1,0 +1,20 @@
+<div *ngFor="let todo of todoList">
+  <mat-card>
+    <mat-card-header class="margin-small-bottom">
+      <mat-card-title>{{ todo.title }}</mat-card-title>
+      <mat-card-subtitle>
+        <span>{{ getStatusName(todo.status) }}</span>
+        <span class="separator">|</span>
+        <span class="category-label" [ngClass]="'category-color-' + todo.categoryColor">{{ todo.categoryName }}</span>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content class="margin-small-bottom">{{ todo.body }}</mat-card-content>
+    <mat-card-actions align="end">
+      <a routerLink="/todo/update/{{ todo.id }}">
+        <button mat-flat-button color="primary" class="margin-small-right">編集</button>
+      </a>
+      <button mat-flat-button (click)="deleteTodo(todo)" color="warn">削除</button>
+    </mat-card-actions>
+  </mat-card>
+  <br>
+</div>
