@@ -6,10 +6,11 @@ import { TodoUpdateComponent } from '../todo/todo-update/todo-update.component';
 import { CategoryListComponent } from '../category/category-list/category-list.component';
 import { CategoryCreateComponent } from '../category/category-create/category-create.component';
 import { CategoryUpdateComponent } from '../category/category-update/category-update.component';
+import { AuthGuard } from '../guard/auth.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'todo', pathMatch: 'full' },
-  { path: 'todo', component: TodoListComponent },
+  { path: 'todo', component: TodoListComponent, canActivate: [AuthGuard] },
   { path: 'todo/create', component: TodoCreateComponent },
   { path: 'todo/update/:id', component: TodoUpdateComponent },
   { path: 'category', component: CategoryListComponent },
