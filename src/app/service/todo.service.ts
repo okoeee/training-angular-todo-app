@@ -4,6 +4,7 @@ import { Todo } from '../models/todo';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { TodoForm } from '../todo/model/form.model';
+import { ErrorHandlingService } from './error-handling.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,50 +17,38 @@ export class TodoService {
   }
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private errorHandlingService: ErrorHandlingService
   ) { }
 
   getTodoList(): Observable<Todo[]> {
     return this.http.get<Todo[]>(this.todoUrl).pipe(
-      catchError(this.handleError<Todo[]>('getTodoList', []))
+      catchError(this.errorHandlingService.handleError<Todo[]>('getTodoList', []))
     );
   }
 
   getTodo(id: number): Observable<Todo> {
     return this.http.get<Todo>(`${this.todoUrl}/${id}`, this.httpOptions).pipe(
-      catchError(this.handleError<Todo>('getTodo'))
+      catchError(this.errorHandlingService.handleError<Todo>('getTodo'))
     );
   }
 
   addTodoList(todoForm: TodoForm): Observable<TodoForm> {
     return this.http.post<TodoForm>(this.todoUrl, todoForm, this.httpOptions).pipe(
-      catchError(this.handleError<TodoForm>('addTodoList'))
+      catchError(this.errorHandlingService.handleError<TodoForm>('addTodoList'))
     )
   }
 
   updateTodo(id: number, todoForm: TodoForm): Observable<TodoForm> {
     return this.http.put<TodoForm>(`${this.todoUrl}/${id}`, todoForm, this.httpOptions).pipe(
-      catchError(this.handleError<TodoForm>('updateTodoList'))
+      catchError(this.errorHandlingService.handleError<TodoForm>('updateTodoList'))
     );
   }
 
   deleteTodo(todo: Todo): Observable<Todo> {
     return this.http.delete<Todo>(`${this.todoUrl}/${todo.id}`, this.httpOptions).pipe(
-      catchError(this.handleError<Todo>('deleteTodoList'))
+      catchError(this.errorHandlingService.handleError<Todo>('deleteTodoList'))
     );
-  }
-
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any, caught: Observable<T>): Observable<T> => {
-      console.error(`${operation} failed: ${error.message}`);
-      if (error.status === 0) {
-        console.error('An error occurred:', error.error.message);
-      // サーバー側から返却されるエラー
-      } else {
-        console.error(`Backend returned code ${error.status}, body was: `, error.error.message);
-      }
-      return of(result as T)
-    }
   }
 
 }
