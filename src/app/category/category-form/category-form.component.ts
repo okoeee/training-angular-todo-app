@@ -45,7 +45,7 @@ export class CategoryFormComponent {
       const categoryForm: CategoryForm = {
         name: categoryFormValue.name,
         slug: categoryFormValue.slug,
-        categoryId: categoryFormValue.categoryColor,
+        categoryColorId: categoryFormValue.categoryColor,
       }
       if(this.isUpdateMode) {
         this.updateCategory(categoryForm);
