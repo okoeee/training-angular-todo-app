@@ -27,6 +27,7 @@ import { CategoryCreateComponent } from './category/category-create/category-cre
 import { CategoryFormComponent } from './category/category-form/category-form.component';
 import { CategoryUpdateComponent } from './category/category-update/category-update.component';
 import { LoginComponent } from './user/login/login.component';
+import { LoginFormComponent } from './user/login-form/login-form.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { LoginComponent } from './user/login/login.component';
     CategoryCreateComponent,
     CategoryFormComponent,
     CategoryUpdateComponent,
-    LoginComponent
+    LoginComponent,
+    LoginFormComponent
   ],
   imports: [
     BrowserModule,

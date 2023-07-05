@@ -3,11 +3,12 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, map, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Auth } from '../models/auth';
+import { LoginForm } from '../user/model/login.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthServiceService {
+export class AuthService {
 
   private authUrl = `${environment.apiUrl}/api/auth`;
   private httpOptions = {
@@ -26,6 +27,10 @@ export class AuthServiceService {
       tap(data => console.log(data)),
       catchError(this.handleError<Auth>('checkAuth'))
     );
+  }
+
+  login(loginForm: LoginForm): Observable<LoginForm> {
+    return this.http.post<LoginForm>(`${this.authUrl}/login`, loginForm, this.httpOptions).pipe();
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
