@@ -25,7 +25,7 @@ export class TodoFormComponent {
     {value: 1, name: '進行中'},
     {value: 2, name: '完了'},
   ];
-  parameterId: number;
+  todoId: number;
 
   constructor(
     private todoService: TodoService,
@@ -40,7 +40,7 @@ export class TodoFormComponent {
       status: new FormControl(0, Validators.required),
     });
 
-    this.parameterId = Number(this.route.snapshot.paramMap.get('id'));
+    this.todoId = Number(this.route.snapshot.paramMap.get('id'));
   }
 
   ngOnInit() {
@@ -92,7 +92,7 @@ export class TodoFormComponent {
 
   setFormInitialValueForUpdate() {
     this.subscriptions.add(
-      this.todoService.getTodo(this.parameterId).subscribe(
+      this.todoService.getTodo(this.todoId).subscribe(
         todo => {
           this.todoForm.patchValue({
               title: todo.title,
@@ -116,7 +116,7 @@ export class TodoFormComponent {
 
   updateTodo(todoForm: TodoForm) {
     this.subscriptions.add(
-      this.todoService.updateTodo(this.parameterId, todoForm).subscribe(
+      this.todoService.updateTodo(this.todoId, todoForm).subscribe(
         _ => {
           this.router.navigate(['/']);
         }
