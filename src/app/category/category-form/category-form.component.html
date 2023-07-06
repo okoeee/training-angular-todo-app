@@ -5,6 +5,9 @@
     <div *ngIf="nameForm.errors?.['required']">
       カテゴリー名が入力されていません
     </div>
+    <div *ngIf="nameForm.errors?.['pattern']">
+      カテゴリー名は英数字・日本語のみを入力することができます
+    </div>
   </div>
   <mat-form-field>
     <mat-label>タイトル</mat-label>
@@ -14,6 +17,9 @@
   <div *ngIf="slugForm.invalid && (slugForm.dirty || slugForm.touched)">
     <div *ngIf="slugForm.errors?.['required']">
       スラッグが入力されていません
+    </div>
+    <div *ngIf="slugForm.errors?.['pattern']">
+      スラッグは英数字のみを入力することができます
     </div>
   </div>
   <mat-form-field>

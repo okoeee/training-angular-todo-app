@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Category } from 'src/app/models/category';
 import { CategoryService } from 'src/app/service/category.service';
 import { CategoryForm } from '../model/form.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-category-form',
@@ -13,7 +13,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class CategoryFormComponent {
 
   @Input() pageTitle = '';
-  @Input() isUpdateMode = false;
+  categoryId: number | undefined;
+  isUpdateMode: boolean
+  subscriptions = new Subscription();
   categoryForm: FormGroup;
   categoryColorList = [
     { value: 1, name: '赤', color: '#FF4500' },
@@ -27,17 +29,34 @@ export class CategoryFormComponent {
     private route: ActivatedRoute
   ) {
     this.categoryForm = new FormGroup({
-      name: new FormControl('', Validators.required),
-      slug: new FormControl('', Validators.required),
+      name: new FormControl('', [
+        Validators.required,
+        Validators.pattern('([^\x01-\x7E]|[\da-zA-Z])+')
+      ]),
+      slug: new FormControl('', [
+        Validators.required,
+        Validators.pattern('^[a-zA-Z]*$')
+      ]),
       categoryColor: new FormControl('', Validators.required),
     });
+    const categoryId = this.route.snapshot.paramMap.get('id');
+    this.isUpdateMode = categoryId ? true : false;
+    if(this.isUpdateMode) {
+      this.categoryId = Number(categoryId);
+    }
   }
 
   ngOnInit(): void {
-    this.setFormInitialValueForUpdate();
+    if(this.isUpdateMode) {
+      this.setFormInitialValueForUpdate();
+    }
   }
 
-  onSubmit() {
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
+  onSubmit(): void {
     if(this.categoryForm.invalid) {
       false
     } else {
@@ -45,7 +64,7 @@ export class CategoryFormComponent {
       const categoryForm: CategoryForm = {
         name: categoryFormValue.name,
         slug: categoryFormValue.slug,
-        categoryId: categoryFormValue.categoryColor,
+        categoryColorId: categoryFormValue.categoryColor,
       }
       if(this.isUpdateMode) {
         this.updateCategory(categoryForm);
@@ -55,28 +74,36 @@ export class CategoryFormComponent {
     }
   }
 
-  setFormInitialValueForUpdate() {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.categoryService.getCategory(id).subscribe(category => {
-      this.categoryForm.setValue({
-        name: category.name,
-        slug: category.slug,
-        categoryColor: category.categoryColor,
-      });
-    });
+  setFormInitialValueForUpdate(): void {
+    if(typeof this.categoryId === 'number') {
+      this.subscriptions.add(
+        this.categoryService.getCategory(this.categoryId).subscribe(category => {
+          this.categoryForm.setValue({
+            name: category.name,
+            slug: category.slug,
+            categoryColor: category.categoryColor,
+          });
+        })
+      );
+    }
   }
 
-  addCategory(categoryForm: CategoryForm) {
-    this.categoryService.addCategory(categoryForm).subscribe(
-      _ => this.router.navigate(['/category'])
+  addCategory(categoryForm: CategoryForm): void {
+    this.subscriptions.add(
+      this.categoryService.addCategory(categoryForm).subscribe(
+        _ => this.router.navigate(['/category'])
+      )
     );
   }
 
-  updateCategory(categoryForm: CategoryForm) {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.categoryService.updateCategory(id, categoryForm).subscribe(
-      _ => this.router.navigate(['/category'])
-    );
+  updateCategory(categoryForm: CategoryForm): void {
+    if(typeof this.categoryId === 'number') {
+      this.subscriptions.add(
+        this.categoryService.updateCategory(this.categoryId, categoryForm).subscribe(
+          _ => this.router.navigate(['/category'])
+        )
+      );
+    }
   }
 
   get nameForm() {
