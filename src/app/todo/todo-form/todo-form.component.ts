@@ -16,7 +16,8 @@ export class TodoFormComponent {
 
   @Input() pageTitle = '';
   @Input() isStatusDisabled: boolean = false;
-  @Input() isUpdateMode: boolean = false;
+  todoId: number | undefined;
+  isUpdateMode: boolean;
   subscriptions = new Subscription();
   todoForm: FormGroup;
   categoryOptions: Category[] = [];
@@ -25,7 +26,6 @@ export class TodoFormComponent {
     {value: 1, name: '進行中'},
     {value: 2, name: '完了'},
   ];
-  todoId: number;
 
   constructor(
     private todoService: TodoService,
@@ -38,9 +38,12 @@ export class TodoFormComponent {
       body: new FormControl('', Validators.required),
       categoryId: new FormControl(0, Validators.required),
       status: new FormControl(0, Validators.required),
-    });
-
-    this.todoId = Number(this.route.snapshot.paramMap.get('id'));
+    })
+    const todoId = this.route.snapshot.paramMap.get('id');
+    this.isUpdateMode = todoId ? true : false;
+    if(this.isUpdateMode) {
+      this.todoId = Number(todoId);
+    }
   }
 
   ngOnInit() {
@@ -91,18 +94,20 @@ export class TodoFormComponent {
   }
 
   setFormInitialValueForUpdate() {
-    this.subscriptions.add(
-      this.todoService.getTodo(this.todoId).subscribe(
-        todo => {
-          this.todoForm.patchValue({
-              title: todo.title,
-              body: todo.body,
-              categoryId: todo.categoryId,
-              status: todo.status
-            });
-        }
-      )
-    );
+    if(typeof this.todoId === 'number') {
+      this.subscriptions.add(
+        this.todoService.getTodo(this.todoId).subscribe(
+          todo => {
+            this.todoForm.patchValue({
+                title: todo.title,
+                body: todo.body,
+                categoryId: todo.categoryId,
+                status: todo.status
+              });
+          }
+        )
+      );
+    }
   }
 
   addTodo(todoForm: TodoForm) {
@@ -115,13 +120,15 @@ export class TodoFormComponent {
   }
 
   updateTodo(todoForm: TodoForm) {
-    this.subscriptions.add(
-      this.todoService.updateTodo(this.todoId, todoForm).subscribe(
-        _ => {
-          this.router.navigate(['/']);
-        }
-      )
-    );
+    if(typeof this.todoId === 'number') {
+      this.subscriptions.add(
+        this.todoService.updateTodo(this.todoId, todoForm).subscribe(
+          _ => {
+            this.router.navigate(['/']);
+          }
+        )
+      );
+    }
   }
 
   get titleForm() {

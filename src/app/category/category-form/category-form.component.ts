@@ -13,7 +13,8 @@ import { Subscription } from 'rxjs';
 export class CategoryFormComponent {
 
   @Input() pageTitle = '';
-  @Input() isUpdateMode = false;
+  categoryId: number | undefined;
+  isUpdateMode: boolean
   subscriptions = new Subscription();
   categoryForm: FormGroup;
   categoryColorList = [
@@ -21,7 +22,6 @@ export class CategoryFormComponent {
     { value: 2, name: '緑', color: '#4CAF50' },
     { value: 3, name: '青', color: '#03A9F4' },
   ];
-  categoryId: number;
 
   constructor(
     private categoryService: CategoryService,
@@ -39,7 +39,11 @@ export class CategoryFormComponent {
       ]),
       categoryColor: new FormControl('', Validators.required),
     });
-    this.categoryId = Number(this.route.snapshot.paramMap.get('id'));
+    const categoryId = this.route.snapshot.paramMap.get('id');
+    this.isUpdateMode = categoryId ? true : false;
+    if(this.isUpdateMode) {
+      this.categoryId = Number(categoryId);
+    }
   }
 
   ngOnInit(): void {
@@ -71,15 +75,17 @@ export class CategoryFormComponent {
   }
 
   setFormInitialValueForUpdate(): void {
-    this.subscriptions.add(
-      this.categoryService.getCategory(this.categoryId).subscribe(category => {
-        this.categoryForm.setValue({
-          name: category.name,
-          slug: category.slug,
-          categoryColor: category.categoryColor,
-        });
-      })
-    );
+    if(typeof this.categoryId === 'number') {
+      this.subscriptions.add(
+        this.categoryService.getCategory(this.categoryId).subscribe(category => {
+          this.categoryForm.setValue({
+            name: category.name,
+            slug: category.slug,
+            categoryColor: category.categoryColor,
+          });
+        })
+      );
+    }
   }
 
   addCategory(categoryForm: CategoryForm): void {
@@ -91,11 +97,13 @@ export class CategoryFormComponent {
   }
 
   updateCategory(categoryForm: CategoryForm): void {
-    this.subscriptions.add(
-      this.categoryService.updateCategory(this.categoryId, categoryForm).subscribe(
-        _ => this.router.navigate(['/category'])
-      )
-    );
+    if(typeof this.categoryId === 'number') {
+      this.subscriptions.add(
+        this.categoryService.updateCategory(this.categoryId, categoryForm).subscribe(
+          _ => this.router.navigate(['/category'])
+        )
+      );
+    }
   }
 
   get nameForm() {
