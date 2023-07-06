@@ -37,7 +37,9 @@ export class CategoryFormComponent {
   }
 
   ngOnInit(): void {
-    this.setFormInitialValueForUpdate();
+    if(this.isUpdateMode) {
+      this.setFormInitialValueForUpdate();
+    }
   }
 
   ngOnDestroy(): void {
