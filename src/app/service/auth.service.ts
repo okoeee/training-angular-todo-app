@@ -29,7 +29,7 @@ export class AuthService {
       headers: this.httpOptions.headers,
       withCredentials: true
     }).pipe(
-      tap(data => console.log(data)),
+      tap(data => console.log(data)), //todo debug用
       catchError(this.errorHandlingService.handleError<Auth>('checkAuth'))
     );
   }

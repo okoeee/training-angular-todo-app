@@ -13,11 +13,11 @@ const routes: Routes = [
   { path: '', redirectTo: 'todo', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'todo', component: TodoListComponent, canActivate: [AuthGuard] },
-  { path: 'todo/create', component: TodoCreateComponent },
-  { path: 'todo/update/:id', component: TodoUpdateComponent },
-  { path: 'category', component: CategoryListComponent },
-  { path: 'category/create', component: CategoryCreateComponent },
-  { path: 'category/update/:id', component: CategoryUpdateComponent },
+  { path: 'todo/create', component: TodoCreateComponent, canActivate: [AuthGuard] },
+  { path: 'todo/update/:id', component: TodoUpdateComponent, canActivate: [AuthGuard] },
+  { path: 'category', component: CategoryListComponent, canActivate: [AuthGuard] },
+  { path: 'category/create', component: CategoryCreateComponent, canActivate: [AuthGuard] },
+  { path: 'category/update/:id', component: CategoryUpdateComponent, canActivate: [AuthGuard] },
 ]
 
 @NgModule({
