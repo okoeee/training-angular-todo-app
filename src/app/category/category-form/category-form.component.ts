@@ -29,8 +29,14 @@ export class CategoryFormComponent {
     private route: ActivatedRoute
   ) {
     this.categoryForm = new FormGroup({
-      name: new FormControl('', Validators.required),
-      slug: new FormControl('', Validators.required),
+      name: new FormControl('', [
+        Validators.required,
+        Validators.pattern('([^\x01-\x7E]|[\da-zA-Z])+')
+      ]),
+      slug: new FormControl('', [
+        Validators.required,
+        Validators.pattern('^[a-zA-Z]*$')
+      ]),
       categoryColor: new FormControl('', Validators.required),
     });
     this.categoryId = Number(this.route.snapshot.paramMap.get('id'));
