@@ -4,6 +4,7 @@ import { Observable, catchError, map, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Auth } from '../models/auth';
 import { LoginForm } from '../user/model/login.model';
+import { ErrorHandlingService } from './error-handling.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,32 +20,25 @@ export class AuthService {
   }
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private errorHandlingService: ErrorHandlingService
   ) { }
 
   checkAuth() {
-    return this.http.get<Auth>(this.authUrl, this.httpOptions).pipe(
+    return this.http.get<Auth>(`${this.authUrl}/verify`, {
+      headers: this.httpOptions.headers,
+      withCredentials: true
+    }).pipe(
       tap(data => console.log(data)),
-      catchError(this.handleError<Auth>('checkAuth'))
+      catchError(this.errorHandlingService.handleError<Auth>('checkAuth'))
     );
   }
 
   login(loginForm: LoginForm): Observable<LoginForm> {
-    return this.http.post<LoginForm>(`${this.authUrl}/login`, loginForm, this.httpOptions).pipe();
+    return this.http.post<LoginForm>(`${this.authUrl}/login`, loginForm, this.httpOptions).pipe(
+      tap(data => console.log(data)),
+      catchError(this.errorHandlingService.handleError<LoginForm>('login'))
+    );
   }
-
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any, caught: Observable<T>): Observable<T> => {
-      console.error(`${operation} failed: ${error.message}`);
-      if (error.status === 0) {
-        console.error('An error occurred:', error.error.message);
-      // サーバー側から返却されるエラー
-      } else {
-        console.error(`Backend returned code ${error.status}, body was: `, error.error.message);
-      }
-      return of(result as T)
-    }
-  }
-
 
 }
