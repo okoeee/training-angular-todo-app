@@ -1,3 +1,4 @@
+import { User } from "src/app/models/user";
 import { LoginForm } from "../model/login.model";
 
 export module UserAction {
@@ -13,6 +14,11 @@ export module UserAction {
 
   export class Logout {
     static readonly type = '[User] Logout';
+  }
+
+  export class SetUser {
+    static readonly type = '[User] SetUser';
+    constructor(public user: User) {}
   }
 
 }

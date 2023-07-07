@@ -42,7 +42,6 @@ export class LoginFormComponent {
   login(loginForm: LoginForm) {
     this.authService.login(loginForm).subscribe(
       _ => {
-        this.store.dispatch(new UserAction.Login(true));
         this.router.navigate(['/todo']);
       }
     );

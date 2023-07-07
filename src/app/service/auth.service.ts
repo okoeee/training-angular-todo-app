@@ -5,6 +5,9 @@ import { environment } from 'src/environments/environment';
 import { Auth } from '../models/auth';
 import { LoginForm } from '../user/model/login.model';
 import { ErrorHandlingService } from './error-handling.service';
+import { Store } from '@ngxs/store';
+import { UserAction } from '../user/store/action';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +24,9 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private errorHandlingService: ErrorHandlingService
+    private errorHandlingService: ErrorHandlingService,
+    private store: Store,
+    private userService: UserService
   ) { }
 
   checkAuth(): Observable<Auth> {
@@ -36,8 +41,29 @@ export class AuthService {
 
   login(loginForm: LoginForm): Observable<LoginForm> {
     return this.http.post<LoginForm>(`${this.authUrl}/login`, loginForm, this.httpOptions).pipe(
-      tap(data => console.log(data)),
+      tap(data => {
+        this.userService.getUser().subscribe(
+          user => {
+            this.store.dispatch([
+              new UserAction.Login(true),
+              new UserAction.SetUser(user)
+            ]);
+          }
+        );
+      }),
       catchError(this.errorHandlingService.handleError<LoginForm>('login'))
+    );
+  }
+
+  logout(): Observable<any> {
+    return this.http.post(`${this.authUrl}/logout`, {
+      headers: this.httpOptions.headers,
+      withCredentials: true
+    }).pipe(
+      tap(_ => {
+        this.store.dispatch(new UserAction.Logout());
+      }),
+      catchError(this.errorHandlingService.handleError('logout'))
     );
   }
 
