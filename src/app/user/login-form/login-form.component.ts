@@ -3,6 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { LoginForm } from '../model/login.model';
 import { AuthService } from 'src/app/service/auth.service';
 import { Router } from '@angular/router';
+import { Store } from '@ngxs/store';
+import { UserAction } from '../store/action';
 
 @Component({
   selector: 'app-login-form',
@@ -15,7 +17,8 @@ export class LoginFormComponent {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private store: Store
   ) {
     this.loginForm = new FormGroup({
       email: new FormControl('', Validators.required),
@@ -39,6 +42,7 @@ export class LoginFormComponent {
   login(loginForm: LoginForm) {
     this.authService.login(loginForm).subscribe(
       _ => {
+        this.store.dispatch(new UserAction.Login(true));
         this.router.navigate(['/todo']);
       }
     );

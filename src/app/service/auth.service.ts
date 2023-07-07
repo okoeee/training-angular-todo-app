@@ -24,7 +24,7 @@ export class AuthService {
     private errorHandlingService: ErrorHandlingService
   ) { }
 
-  checkAuth() {
+  checkAuth(): Observable<Auth> {
     return this.http.get<Auth>(`${this.authUrl}/verify`, {
       headers: this.httpOptions.headers,
       withCredentials: true
