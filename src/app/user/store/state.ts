@@ -32,6 +32,11 @@ export class UserState {
     return state.isLoggedIn;
   }
 
+  @Selector()
+  static user(state: UserStateModel) {
+    return state.user;
+  }
+
   @Action(UserAction.AuthCheck)
   isLoggedIn(ctx: StateContext<UserStateModel>) {
     return this.authService.checkAuth().pipe(
