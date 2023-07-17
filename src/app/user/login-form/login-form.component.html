@@ -1,0 +1,25 @@
+<h2>ログイン</h2>
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+
+  <div *ngIf="emailForm.invalid && (emailForm.dirty || emailForm.touched)">
+    <div *ngIf="emailForm.errors?.['required']">
+      メールアドレスが入力されていません
+    </div>
+  </div>
+  <mat-form-field>
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email">
+  </mat-form-field>
+
+  <div *ngIf="passwordForm.invalid && (passwordForm.dirty || passwordForm.touched)">
+    <div *ngIf="passwordForm.errors?.['required']">
+      パスワードが入力されていません
+    </div>
+  </div>
+  <mat-form-field>
+    <mat-label>パスワード</mat-label>
+    <input matInput formControlName="password">
+  </mat-form-field>
+
+  <button type="submit" mat-flat-button color="primary">送信</button>
+</form>

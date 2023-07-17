@@ -26,6 +26,11 @@ import { HeaderComponent } from './views/header/header.component';
 import { CategoryCreateComponent } from './category/category-create/category-create.component';
 import { CategoryFormComponent } from './category/category-form/category-form.component';
 import { CategoryUpdateComponent } from './category/category-update/category-update.component';
+import { LoginComponent } from './user/login/login.component';
+import { LoginFormComponent } from './user/login-form/login-form.component';
+import { NgxsModule } from '@ngxs/store';
+import { UserState } from './user/store/state';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 
 @NgModule({
   declarations: [
@@ -40,7 +45,9 @@ import { CategoryUpdateComponent } from './category/category-update/category-upd
     HeaderComponent,
     CategoryCreateComponent,
     CategoryFormComponent,
-    CategoryUpdateComponent
+    CategoryUpdateComponent,
+    LoginComponent,
+    LoginFormComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +61,11 @@ import { CategoryUpdateComponent } from './category/category-update/category-upd
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatTableModule
+    MatTableModule,
+    NgxsModule.forRoot([
+      UserState
+    ]),
+    NgxsReduxDevtoolsPluginModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]
